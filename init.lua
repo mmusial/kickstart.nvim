@@ -102,7 +102,7 @@ vim.opt.number = true
 -- vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+vim.opt.mouse = ''
 
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
@@ -855,6 +855,107 @@ require('lazy').setup {
   require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
 
+  --
+  --
+  -- BEGIN ADDED BY ME
+  --
+  --
+  { -- Github Copilot
+    'zbirenbaum/copilot.lua',
+    event = 'InsertEnter',
+    config = function()
+      require('copilot').setup {
+        suggestion = {
+          auto_trigger = true,
+        },
+      }
+    end,
+  },
+
+  { -- NvimTree
+    'nvim-tree/nvim-tree.lua',
+    config = function()
+      local function my_on_tree_attach(bufnr)
+        local api = require 'nvim-tree.api'
+
+        local function opts(desc)
+          return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+
+        -- default mappings
+        api.config.mappings.default_on_attach(bufnr)
+
+        -- custom mappings
+        -- vim.keymap.set('n', '<C-t>', api.tree.change_root_to_parent,        opts('Up'))
+        -- vim.keymap.set('n', '?',     api.tree.toggle_help,                  opts('Help'))
+      end
+
+      require('nvim-tree').setup {
+        sort_by = 'case_sensitive',
+        view = {
+          width = 30,
+        },
+        renderer = {
+          group_empty = true,
+        },
+        filters = {
+          dotfiles = false,
+        },
+        on_attach = my_on_tree_attach,
+      }
+    end,
+  },
+
+  'nvim-lua/plenary.nvim',
+  {
+    'ThePrimeagen/harpoon',
+    config = function()
+      require('harpoon').setup {
+        global_settings = {
+          -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
+          save_on_toggle = false,
+
+          -- saves the harpoon file upon every change. disabling is unrecommended.
+          save_on_change = true,
+
+          -- sets harpoon to run the command immediately as it's passed to the terminal when calling `sendCommand`.
+          enter_on_sendcmd = false,
+
+          -- closes any tmux windows harpoon that harpoon creates when you close Neovim.
+          tmux_autoclose_windows = false,
+
+          -- filetypes that you want to prevent from adding to the harpoon list menu.
+          excluded_filetypes = { 'harpoon' },
+
+          -- set marks specific to each git branch inside git repository
+          mark_branch = false,
+
+          -- enable tabline with harpoon marks
+          tabline = false,
+          tabline_prefix = '   ',
+          tabline_suffix = '   ',
+        },
+      }
+      require('telescope').load_extension 'harpoon'
+
+      vim.keymap.set('n', '<leader>hh', '<cmd>Telescope harpoon marks<CR>', { desc = '[H]arpoon Marks Telescope' })
+      vim.keymap.set('n', '<leader>ha', require('harpoon.mark').add_file, { desc = '[H]arpoon [A]dd File' })
+      vim.keymap.set('n', '<leader>ht', require('harpoon.mark').toggle_file, { desc = '[H]arpoon [T]oggle File' })
+      vim.keymap.set('n', '<leader>hr', require('harpoon.mark').rm_file, { desc = '[H]arpoon [R]emove File' })
+      vim.keymap.set('n', '<leader>hq', require('harpoon.ui').toggle_quick_menu, { desc = '[H]arpoon Toggle [Q]uick Menu' })
+      for i = 1, 9, 1 do
+        vim.keymap.set('n', '<leader>' .. i, function()
+          require('harpoon.ui').nav_file(i)
+        end, { desc = 'Harpoon Navigate File: [' .. i .. ']' })
+      end
+    end,
+  },
+
+  --
+  --
+  -- END ADDED BY ME
+  --
+  --
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
@@ -862,6 +963,26 @@ require('lazy').setup {
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   { import = 'custom.plugins' },
 }
+
+-- my keymaps for various things
+--vim.keymap.set('n', '<leader>pe', vim.cmd.Ex, { desc = '[P]roject [E]explorer' })
+vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'Toogle NvimTree' })
+vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'Paste over, keep clipboard' })
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = 'Yank to system clipboard' })
+vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = 'Yank to system clipboard' })
+vim.keymap.set('n', '<leader>p', [["+p]], { desc = 'Paste from system clipboard' })
+vim.keymap.set('n', '<leader>P', [["+P]], { desc = 'Paste from system clipboard' })
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = 'Delete, keep clipboard' })
+vim.keymap.set('n', '<leader>rs', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Substitute word under cursor' })
+vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, desc = 'Add +x permission to current file' })
+vim.keymap.set('n', '<leader>z', '<cmd>w<CR>', { desc = 'Save' })
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move line down' })
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move line up' })
+vim.keymap.set('n', 'J', 'mzJ`z', { desc = 'Join line' })
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up' })
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Move to next search result' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Move to previous search result' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sts=4 sw=4 et

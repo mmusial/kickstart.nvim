@@ -102,7 +102,7 @@ vim.opt.number = true
 -- vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = ''
+vim.opt.mouse = 'a'
 
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
@@ -956,6 +956,7 @@ require('lazy').setup {
   -- END ADDED BY ME
   --
   --
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
@@ -964,8 +965,14 @@ require('lazy').setup {
   { import = 'custom.plugins' },
 }
 
+--
+--
+-- BEGIN ADDED BY ME
+--
+--
+
 -- my keymaps for various things
---vim.keymap.set('n', '<leader>pe', vim.cmd.Ex, { desc = '[P]roject [E]explorer' })
+-- vim.keymap.set('n', '<leader>pe', vim.cmd.Ex, { desc = '[P]roject [E]explorer' })
 vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'Toogle NvimTree' })
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'Paste over, keep clipboard' })
 vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = 'Yank to system clipboard' })
@@ -984,5 +991,25 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up' })
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Move to next search result' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Move to previous search result' })
 
+vim.opt.relativenumber = true
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.wrap = false
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+vim.opt.undofile = true
+vim.opt.termguicolors = true
+
+--
+--
+--
+-- END ADDED BY ME
+--
+--
+
 -- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=4 sts=4 sw=4 et
+-- vim: ts=2 sts=2 sw=2 et

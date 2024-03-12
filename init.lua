@@ -531,7 +531,9 @@ require('lazy').setup {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        clangd = {
+          filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'hpp' },
+        },
         gopls = {},
         pyright = {},
         rust_analyzer = {},
@@ -585,6 +587,9 @@ require('lazy').setup {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format lua code
+        'goimports',
+        'yamlfmt',
+        'buf',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -605,22 +610,30 @@ require('lazy').setup {
 
   { -- Autoformat
     'stevearc/conform.nvim',
-    opts = {
-      notify_on_error = false,
-      format_on_save = {
-        timeout_ms = 500,
-        lsp_fallback = true,
-      },
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
-      },
-    },
+    config = function()
+      require('conform').setup {
+        notify_on_error = false,
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_fallback = true,
+        },
+        formatters_by_ft = {
+          lua = { 'stylua' },
+          go = { 'goimports' },
+          yaml = { 'yamlfmt' },
+          proto = { 'buf' },
+          -- Conform can also run multiple formatters sequentially
+          -- python = { "isort", "black" },
+          --
+          -- You can use a sub-list to tell conform to run *until* a formatter
+          -- is found.
+          -- javascript = { { "prettierd", "prettier" } },
+        },
+      }
+      require('conform').formatters.yamlfmt = {
+        args = { '--retain_line_breaks', 'true' },
+      }
+    end,
   },
 
   { -- Autocompletion
@@ -973,7 +986,7 @@ require('lazy').setup {
 
 -- my keymaps for various things
 -- vim.keymap.set('n', '<leader>pe', vim.cmd.Ex, { desc = '[P]roject [E]explorer' })
-vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'Toogle NvimTree' })
+vim.keymap.set('n', '<leader>f', '<cmd>NvimTreeToggle<CR>', { desc = 'Toogle NvimTree' })
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'Paste over, keep clipboard' })
 vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = 'Yank to system clipboard' })
 vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = 'Yank to system clipboard' })

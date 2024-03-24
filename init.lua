@@ -963,6 +963,34 @@ require('lazy').setup({
       end
     end,
   },
+  {
+    'ellisonleao/carbon-now.nvim',
+    lazy = true,
+    cmd = 'CarbonNow',
+    config = function()
+      require('carbon-now').setup {
+        base_url = 'https://carbon.now.sh/',
+        open_cmd = 'wsl-chrome',
+        options = {
+          bg = '#4A4A4A',
+          drop_shadow_blur = '32px',
+          drop_shadow = true,
+          drop_shadow_offset_y = '20px',
+          font_family = 'Cascadia Code',
+          font_size = '16px',
+          line_height = '110%',
+          line_numbers = true,
+          theme = 'vscode',
+          titlebar = '',
+          watermark = false,
+          width = '1280',
+          window_theme = 'boxy',
+          padding_horizontal = '80px',
+          padding_vertical = '50px',
+        },
+      }
+    end,
+  },
 
   --
   --
@@ -1023,6 +1051,7 @@ vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down' })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up' })
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Move to next search result' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Move to previous search result' })
+vim.keymap.set('v', '<leader>cn', ':CarbonNow<CR>', { silent = true })
 
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4

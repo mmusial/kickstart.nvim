@@ -878,8 +878,27 @@ require('lazy').setup({
     event = 'InsertEnter',
     config = function()
       require('copilot').setup {
+        panel = {
+          keymap = {
+            open = '<M-\\>',
+          },
+        },
         suggestion = {
           auto_trigger = true,
+          keymap = {
+            accept = '<M-a>',
+            accept_line = '<M-l>',
+            accept_word = '<M-w>',
+            next = '<M-]>',
+            prev = '<M-[>',
+            dismiss = '<C-]>',
+          },
+        },
+        filetypes = {
+          yaml = true,
+          markdown = true,
+          gitcommit = true,
+          gitrebase = true,
         },
       }
     end,

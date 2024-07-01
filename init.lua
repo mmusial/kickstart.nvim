@@ -583,6 +583,8 @@ require('lazy').setup({
         'goimports',
         'yamlfmt',
         'buf',
+        'prettierd',
+        'eslint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -616,11 +618,11 @@ require('lazy').setup({
           yaml = { 'yamlfmt' },
           proto = { 'buf' },
           -- Conform can also run multiple formatters sequentially
-          -- python = { "isort", "black" },
+          -- python = { 'isort', 'black' },
           --
           -- You can use a sub-list to tell conform to run *until* a formatter
           -- is found.
-          -- javascript = { { "prettierd", "prettier" } },
+          javascript = { { 'prettierd', 'prettier' } },
         },
       }
       require('conform').formatters.yamlfmt = {
@@ -724,6 +726,7 @@ require('lazy').setup({
           { name = 'rust_analyzer' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'eslint' },
         },
       }
     end,

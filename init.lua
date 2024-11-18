@@ -906,10 +906,14 @@ require('lazy').setup({
           },
         },
         filetypes = {
+          javascript = true,
+          typescript = true,
+          typescriptreact = true,
           yaml = true,
           markdown = true,
           gitcommit = true,
           gitrebase = true,
+          ['.'] = true,
         },
       }
     end,
